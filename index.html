@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bitqs · 游戏 × AI</title>
+<meta name="description" content="独立开发者 bitqs — 痴迷『最小的逻辑,如何产生游戏感』,用 AI 把这件事做快、做爽。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0b14;
+  --bg-card: #12121f;
+  --ink: #e8e6df;
+  --dim: #8a8798;
+  --gold: #ffc83d;
+  --red: #ff4757;
+  --cyan: #3de8ff;
+  --border: #2a2a3e;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Noto Sans SC', sans-serif;
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* CRT scanlines + vignette */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.18) 2px 4px);
+  pointer-events: none; z-index: 9000;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%);
+  pointer-events: none; z-index: 9001;
+}
+
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== Hero ===== */
+header {
+  padding: 88px 0 56px;
+  position: relative;
+}
+.logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(2rem, 7vw, 3.4rem);
+  color: var(--gold);
+  text-shadow: 4px 4px 0 var(--red), 8px 8px 0 rgba(255,71,87,.25);
+  letter-spacing: 2px;
+  animation: drop-in .5s cubic-bezier(.2,1.6,.4,1) both;
+}
+.logo .cursor {
+  display: inline-block; width: .55em; height: .9em;
+  background: var(--cyan); margin-left: 8px; vertical-align: baseline;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes drop-in {
+  from { transform: translateY(-40px) scale(1.2); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+.tagline {
+  margin-top: 28px;
+  font-size: 1.15rem; font-weight: 700;
+  animation: fade-up .6s .25s both;
+}
+.tagline .vs { color: var(--red); font-family: 'Press Start 2P', monospace; font-size: .8em; padding: 0 .35em; }
+.sub {
+  margin-top: 10px; color: var(--dim); max-width: 560px;
+  animation: fade-up .6s .4s both;
+}
+.sub em { color: var(--cyan); font-style: normal; }
+@keyframes fade-up {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+/* ===== Section title ===== */
+.sec {
+  font-family: 'Press Start 2P', monospace;
+  font-size: .8rem; color: var(--cyan);
+  margin: 64px 0 24px;
+  display: flex; align-items: center; gap: 14px;
+}
+.sec::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, var(--border), transparent); }
+.sec .zh { font-family: 'Noto Sans SC', sans-serif; font-weight: 900; font-size: 1.25rem; color: var(--ink); }
+
+/* ===== Cards: arcade cabinet select ===== */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; }
+.card {
+  background: var(--bg-card);
+  border: 3px solid var(--border);
+  box-shadow: 6px 6px 0 #000;
+  padding: 22px 20px 20px;
+  position: relative;
+  text-decoration: none; color: var(--ink);
+  display: flex; flex-direction: column; gap: 10px;
+  transition: transform .08s, border-color .08s;
+}
+a.card:hover {
+  border-color: var(--gold);
+  transform: translate(-2px,-2px);
+  box-shadow: 8px 8px 0 #000;
+  animation: hitshake .18s linear;
+}
+a.card:hover::after {
+  content: ''; position: absolute; inset: 0;
+  background: #fff; opacity: 0;
+  animation: hitflash .18s linear;
+  pointer-events: none;
+}
+@keyframes hitflash { 0% { opacity: .85; } 100% { opacity: 0; } }
+@keyframes hitshake {
+  0% { transform: translate(-2px,-2px); }
+  25% { transform: translate(-5px,-1px); }
+  50% { transform: translate(0,-4px); }
+  75% { transform: translate(-4px,-3px); }
+  100% { transform: translate(-2px,-2px); }
+}
+.card .icon { font-size: 1.9rem; line-height: 1; }
+.card h3 { font-size: 1.1rem; font-weight: 900; }
+.card h3 .en { color: var(--dim); font-weight: 400; font-size: .8rem; margin-left: 6px; }
+.card p { color: var(--dim); font-size: .9rem; flex: 1; }
+.card .play {
+  font-family: 'Press Start 2P', monospace; font-size: .65rem;
+  color: var(--gold); margin-top: 6px;
+}
+a.card:hover .play { animation: blink .6s steps(1) infinite; }
+.card .tag {
+  position: absolute; top: -3px; right: 12px;
+  background: var(--red); color: #fff;
+  font-size: .68rem; font-weight: 700;
+  padding: 2px 9px;
+}
+.card.dev { opacity: .75; }
+.card.dev .tag { background: var(--border); color: var(--dim); }
+
+/* ===== Footer ===== */
+footer {
+  margin-top: 88px; padding: 36px 0 64px;
+  border-top: 2px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: center;
+  color: var(--dim); font-size: .9rem;
+}
+footer a { color: var(--cyan); text-decoration: none; font-weight: 700; }
+footer a:hover { color: var(--gold); }
+.press {
+  font-family: 'Press Start 2P', monospace; font-size: .6rem;
+  color: var(--dim); margin-left: auto;
+  animation: blink 1.4s steps(1) infinite;
+}
+
+/* damage numbers */
+.dmg {
+  position: fixed; z-index: 9500;
+  font-family: 'Press Start 2P', monospace;
+  font-weight: 700; pointer-events: none;
+  animation: dmg-pop .7s cubic-bezier(.2,1.4,.5,1) forwards;
+}
+@keyframes dmg-pop {
+  0%   { transform: translate(-50%,-50%) scale(.4); opacity: 1; }
+  25%  { transform: translate(-50%, calc(-50% - 28px)) scale(1.25); opacity: 1; }
+  100% { transform: translate(-50%, calc(-50% - 64px)) scale(1); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1 class="logo">bitqs<span class="cursor"></span></h1>
+    <p class="tagline">独立开发者 · 游戏<span class="vs">×</span>AI · 边做边玩边拆解</p>
+    <p class="sub">痴迷『<em>最小的逻辑,如何产生游戏感</em>』——也痴迷用 AI 把这件事做快、做爽。<br>试着在这页上随便点几下。</p>
+  </header>
+
+  <h2 class="sec">GAMES <span class="zh">游戏</span></h2>
+  <div class="grid">
+    <a class="card" href="https://sanguo-survivor.pages.dev" target="_blank" rel="noopener">
+      <span class="tag">NEW</span>
+      <span class="icon">⚔️</span>
+      <h3>三国幸存者<span class="en">Three Kingdoms Survivors</span></h3>
+      <p>乱世割草,一骑当千。三国题材的《吸血鬼幸存者》式割草游戏:八名将、无双绝技、千军万马一念清场。浏览器直开。</p>
+      <span class="play">▶ PRESS TO PLAY</span>
+    </a>
+    <a class="card" href="https://juice-lab.shuangqu.workers.dev" target="_blank" rel="noopener">
+      <span class="tag">NEW</span>
+      <span class="icon">👊</span>
+      <h3>Juice Lab<span class="en">打击感实验室</span></h3>
+      <p>从"死鱼"到"上头":11 步逐层开关打击感技术(闪白/顿帧/震屏/粒子…),A/B 对比,亲手感受手感怎么叠出来。</p>
+      <span class="play">▶ PRESS TO PLAY</span>
+    </a>
+    <a class="card" href="https://thegametheory.pages.dev" target="_blank" rel="noopener">
+      <span class="icon">🎭</span>
+      <h3>The Game Theory<span class="en">游戏论</span></h3>
+      <p>边玩边拆穿自己的元游戏:一个过分诚实的设计师,当面坦白每一个让你上瘾的机制。</p>
+      <span class="play">▶ PRESS TO PLAY</span>
+    </a>
+  </div>
+
+  <h2 class="sec">TOOLS <span class="zh">AI × 游戏开发</span></h2>
+  <div class="grid">
+    <a class="card" href="https://github.com/bitqs/Slime" target="_blank" rel="noopener">
+      <span class="icon">🟢</span>
+      <h3>Slime<span class="en">Claude Code RPG 插件</span></h3>
+      <p>把真实的 Claude Code 会话变成回合制 RPG:目标是 Boss,todo 是小怪,token 是资源。「既然已经上瘾了,何不更上瘾一点。」</p>
+      <span class="play">▶ GITHUB</span>
+    </a>
+    <div class="card dev">
+      <span class="tag">DEV</span>
+      <span class="icon">🧬</span>
+      <h3>vs-anatomy<span class="en">幸存者解剖</span></h3>
+      <p>反编译《吸血鬼幸存者》→ 157 条可复用设计原子(架构/手感/数值/经济,条条带出处)。</p>
+    </div>
+    <div class="card dev">
+      <span class="tag">DEV</span>
+      <span class="icon">🏭</span>
+      <h3>Gamage<span class="en">AI 协作游戏开发框架</span></h3>
+      <p>六 Agent + 五道门禁的游戏开发流水线模板 —— AI 干活,人类只管手感。三国幸存者就是它的首跑作品。</p>
+    </div>
+  </div>
+
+  <footer>
+    <a href="https://github.com/bitqs" target="_blank" rel="noopener">GitHub</a>
+    <span>🧰 Phaser · TypeScript · Remotion · Cloudflare · Claude Code</span>
+    <span class="press">PRESS START</span>
+  </footer>
+</div>
+
+<script>
+// 全页打击感:点击任意处弹伤害数字 —— 本站即 demo
+const COLORS = ['#ffc83d', '#ff4757', '#3de8ff', '#fff'];
+addEventListener('pointerdown', e => {
+  const d = document.createElement('div');
+  d.className = 'dmg';
+  const crit = Math.random() < 0.2;
+  d.textContent = crit ? 'CRIT! ' + (Math.floor(Math.random() * 900) + 100) : Math.floor(Math.random() * 99) + 1;
+  d.style.left = (e.clientX + (Math.random() * 24 - 12)) + 'px';
+  d.style.top = (e.clientY + (Math.random() * 12 - 6)) + 'px';
+  d.style.fontSize = crit ? '1.3rem' : '.85rem';
+  d.style.color = crit ? '#ffc83d' : COLORS[Math.floor(Math.random() * COLORS.length)];
+  document.body.appendChild(d);
+  setTimeout(() => d.remove(), 700);
+});
+</script>
+</body>
+</html>
