@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>wanderen · 玩的人 · 游戏 × AI</title>
 <meta name="description" content="wanderen / 玩的人 — 痴迷『最小的逻辑,如何产生游戏感』,用 AI 把这件事做快、做爽。">
+<link rel="icon" type="image/svg+xml" href="wanderen-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
@@ -18,6 +19,17 @@
   --red: #ff4757;
   --cyan: #3de8ff;
   --border: #2a2a3e;
+  /* design-system surface textures + glows */
+  --glow-gold: rgba(255,200,61,.40);
+  --glow-cyan: rgba(61,232,255,.40);
+  --ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--gold), 0 0 14px var(--glow-gold);
+  --nebula:
+    radial-gradient(60% 80% at 18% 6%, rgba(255,200,61,.10), transparent 60%),
+    radial-gradient(50% 70% at 92% 26%, rgba(61,232,255,.10), transparent 55%),
+    radial-gradient(70% 60% at 60% 100%, rgba(255,71,87,.08), transparent 60%);
+  --grid:
+    linear-gradient(rgba(255,200,61,.045) 1px, transparent 1px) 0 0 / 100% 24px,
+    linear-gradient(90deg, rgba(255,200,61,.045) 1px, transparent 1px) 0 0 / 24px 100%;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -51,17 +63,35 @@ header {
   padding: 88px 0 56px;
   position: relative;
 }
+/* nebula wash + faint gold pixel-grid, full-bleed, masked to fade out */
+header::before {
+  content: '';
+  position: absolute; top: -88px; bottom: 0;
+  left: 50%; width: 100vw; transform: translateX(-50%);
+  background: var(--nebula), var(--grid);
+  -webkit-mask-image: radial-gradient(80% 90% at 30% 30%, #000, transparent 78%);
+  mask-image: radial-gradient(80% 90% at 30% 30%, #000, transparent 78%);
+  pointer-events: none; z-index: 0;
+}
+header > * { position: relative; z-index: 1; }
 .logo {
   font-family: 'Press Start 2P', monospace;
   font-size: clamp(1.4rem, 5.5vw, 3rem);
   color: var(--gold);
-  text-shadow: 4px 4px 0 var(--red), 8px 8px 0 rgba(255,71,87,.25);
+  text-shadow: 4px 4px 0 var(--red), 8px 8px 0 rgba(255,71,87,.25), 0 0 26px var(--glow-gold);
   letter-spacing: 2px;
+  display: flex; align-items: center; gap: .35em; flex-wrap: wrap;
   animation: drop-in .5s cubic-bezier(.2,1.6,.4,1) both;
 }
+.logo .mark {
+  height: .9em; width: auto; image-rendering: pixelated;
+  filter: drop-shadow(0 0 12px var(--glow-gold));
+}
+.logo .ai { color: var(--cyan); }
 .logo .cursor {
   display: inline-block; width: .55em; height: .9em;
-  background: var(--cyan); margin-left: 8px; vertical-align: baseline;
+  background: var(--cyan); margin-left: 2px; vertical-align: baseline;
+  box-shadow: 0 0 10px var(--glow-cyan);
   animation: blink 1s steps(1) infinite;
 }
 @keyframes blink { 50% { opacity: 0; } }
@@ -83,6 +113,50 @@ header {
 @keyframes fade-up {
   from { transform: translateY(16px); opacity: 0; }
   to   { transform: none; opacity: 1; }
+}
+
+/* ===== Book feature banner (top marquee) ===== */
+.book {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 22px;
+  margin-top: 40px;
+  background: var(--bg-card);
+  border: 3px solid var(--gold);
+  box-shadow: 6px 6px 0 #000;
+  padding: 24px 26px;
+  position: relative; overflow: hidden;
+  text-decoration: none; color: var(--ink);
+  transition: transform .08s, box-shadow .08s;
+}
+.book::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background: var(--nebula);
+  -webkit-mask-image: radial-gradient(120% 100% at 100% 50%, #000, transparent 70%);
+  mask-image: radial-gradient(120% 100% at 100% 50%, #000, transparent 70%);
+  pointer-events: none;
+}
+.book > * { position: relative; z-index: 1; }
+.book:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 #000; animation: hitshake .18s linear; }
+.book:focus-visible { outline: none; box-shadow: var(--ring), 8px 8px 0 #000; }
+.book .cover { font-size: 3rem; line-height: 1; filter: drop-shadow(0 0 14px var(--glow-gold)); }
+.book .label {
+  font-family: 'Press Start 2P', monospace; font-size: .62rem; color: var(--cyan);
+  display: block; margin-bottom: 10px;
+}
+.book h2 { font-size: 1.5rem; font-weight: 900; line-height: 1.25; }
+.book h2 .en { color: var(--gold); font-family: 'Press Start 2P', monospace; font-size: .6em; margin-left: 10px; vertical-align: middle; }
+.book p { color: var(--dim); font-size: .95rem; margin-top: 8px; max-width: 60ch; }
+.book .cta {
+  font-family: 'Press Start 2P', monospace; font-size: .7rem; color: var(--gold);
+  white-space: nowrap; justify-self: end;
+}
+.book:hover .cta { animation: blink .6s steps(1) infinite; }
+.book .tag {
+  position: absolute; top: -3px; right: 14px; z-index: 2;
+  background: var(--red); color: #fff; font-size: .68rem; font-weight: 700; padding: 2px 9px;
+}
+@media (max-width: 640px) {
+  .book { grid-template-columns: 1fr; gap: 14px; text-align: left; }
+  .book .cta { justify-self: start; }
 }
 
 /* ===== Section title ===== */
@@ -112,6 +186,15 @@ a.card:hover {
   transform: translate(-2px,-2px);
   box-shadow: 8px 8px 0 #000;
   animation: hitshake .18s linear;
+}
+a.card:focus-visible {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: var(--ring), 8px 8px 0 #000;
+}
+footer a:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
 }
 a.card:hover::after {
   content: ''; position: absolute; inset: 0;
@@ -172,16 +255,31 @@ footer a:hover { color: var(--gold); }
   25%  { transform: translate(-50%, calc(-50% - 28px)) scale(1.25); opacity: 1; }
   100% { transform: translate(-50%, calc(-50% - 64px)) scale(1); opacity: 0; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
 </style>
 </head>
 <body>
 
 <div class="wrap">
   <header>
-    <h1 class="logo">wanderen<span class="cursor"></span></h1>
+    <h1 class="logo"><img class="mark" src="wanderen-mark.svg" alt="">wanderen<span class="ai">.ai</span><span class="cursor"></span></h1>
     <p class="tagline">玩的人 · 游戏<span class="vs">×</span>AI · 边做边玩边拆解</p>
     <p class="sub">痴迷『<em>最小的逻辑,如何产生游戏感</em>』——也痴迷用 AI 把这件事做快、做爽。<br>试着在这页上随便点几下。</p>
   </header>
+
+  <a class="book" href="/book/">
+    <span class="tag">NEW</span>
+    <span class="cover">📖</span>
+    <div>
+      <span class="label">BOOK · 连载中</span>
+      <h2>玩的人<span class="en">HOMO LUDENS</span></h2>
+      <p>一台多-agent 写作机正在写的书:从电子游戏、抖音到游戏化人生,九章拆穿『玩』到底是什么 —— 以及它什么时候开始玩你。</p>
+    </div>
+    <span class="cta">▸ 开始阅读</span>
+  </a>
 
   <h2 class="sec">GAMES <span class="zh">游戏</span></h2>
   <div class="grid">
@@ -267,7 +365,9 @@ footer a:hover { color: var(--gold); }
 <script>
 // 全页打击感:点击任意处弹伤害数字 —— 本站即 demo
 const COLORS = ['#ffc83d', '#ff4757', '#3de8ff', '#fff'];
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)');
 addEventListener('pointerdown', e => {
+  if (REDUCED.matches) return;
   const d = document.createElement('div');
   d.className = 'dmg';
   const crit = Math.random() < 0.2;
