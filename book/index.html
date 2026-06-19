@@ -6,6 +6,7 @@
 <title>玩的人 · Homo Ludens — wanderen.ai</title>
 <meta name="description" content="《玩的人》Homo Ludens — 一台多-agent 写作机正在写的书:从电子游戏、抖音到游戏化人生,九章拆穿『玩』到底是什么。">
 <link rel="icon" type="image/svg+xml" href="/wanderen-mark.svg">
+<script>try{var t=localStorage.getItem('wd-book-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+SC:wght@400;700;900&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
@@ -15,6 +16,28 @@
   --dim: #8a8798; --gold: #ffc83d; --red: #ff4757; --cyan: #3de8ff; --border: #2a2a3e;
   --glow-gold: rgba(255,200,61,.40);
   --ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--gold), 0 0 14px var(--glow-gold);
+  /* --- reading color scheme (the book page only; chrome stays arcade) --- */
+  --page: transparent;       /* reading-column background */
+  --rink: #e8e6df;           /* reading body text */
+  --rink-hi: #f4f2ec;        /* reading headings */
+  --rink-soft: #8a8798;      /* quotes / muted in reading */
+  --rstrong: #ffc83d;        /* <strong>, section heads, ch labels */
+  --rem: #3de8ff;            /* <em>, blockquote rule, code */
+  --rline: #2a2a3e;          /* rules / separators in reading */
+  --rsel: rgba(255,71,87,.4);
+  --panel-border: transparent;
+  --scan-a: .14;             /* CRT scanline alpha */
+  --vig-a: .5;               /* vignette alpha */
+}
+html[data-theme="sepia"] {
+  --page: #efe2c4; --rink: #43361f; --rink-hi: #2b2113; --rink-soft: #7a6748;
+  --rstrong: #985a00; --rem: #1f6f7a; --rline: #d6c197; --rsel: rgba(152,90,0,.22);
+  --panel-border: #d6c197; --scan-a: 0; --vig-a: 0;
+}
+html[data-theme="paper"] {
+  --page: #f5f3ec; --rink: #20202b; --rink-hi: #0b0b14; --rink-soft: #6a6878;
+  --rstrong: #a8730a; --rem: #0e7490; --rline: #d8d5c9; --rsel: rgba(255,71,87,.2);
+  --panel-border: #d8d5c9; --scan-a: 0; --vig-a: 0;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -25,11 +48,11 @@ body {
 }
 body::before {
   content: ''; position: fixed; inset: 0; z-index: 9000; pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.14) 2px 4px);
+  background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,var(--scan-a)) 2px 4px);
 }
 body::after {
   content: ''; position: fixed; inset: 0; z-index: 9001; pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.5) 100%);
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,var(--vig-a)) 100%);
 }
 a { color: var(--cyan); }
 
@@ -60,6 +83,17 @@ a { color: var(--cyan); }
 .topbar .readout #cur { color: var(--ink-hi); }
 .topbar .readout #curwc { color: var(--gold); }
 .topbar .readout .tot { color: var(--cyan); }
+
+/* reading color-scheme switcher */
+.themes { margin-left: auto; display: flex; gap: 5px; flex: none; }
+.themes button {
+  font-family: 'Press Start 2P', monospace; font-size: .5rem; cursor: pointer;
+  padding: 6px 8px; background: transparent; color: var(--dim);
+  border: 2px solid var(--border); transition: .12s;
+}
+.themes button:hover { border-color: var(--gold); color: var(--ink-hi); }
+.themes button.on { border-color: var(--gold); color: var(--gold); background: rgba(255,200,61,.06); box-shadow: 2px 2px 0 #000; }
+.topbar .readout { margin-left: 14px; }
 
 /* chapter-nav strip (上方) */
 .chapnav { display: flex; gap: 6px; padding: 0 18px 10px; overflow-x: auto; scrollbar-width: thin; }
@@ -96,37 +130,37 @@ a { color: var(--cyan); }
 .toc a.active .n, .toc a.active .wc { color: var(--gold); }
 
 /* reading column */
-.read { padding: 56px clamp(24px,5vw,72px) 120px; min-width: 0; }
-.book-hero { margin-bottom: 64px; padding-bottom: 40px; border-bottom: 3px solid var(--border); }
-.book-hero .kicker { font-family: 'Press Start 2P', monospace; font-size: .6rem; color: var(--cyan); }
-.book-hero h1 { font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(2.4rem,6vw,3.6rem); color: var(--gold); margin: 18px 0 6px; text-shadow: 3px 3px 0 var(--red); }
-.book-hero .en { font-family: 'Press Start 2P', monospace; font-size: .9rem; color: var(--dim); letter-spacing: 1px; }
-.book-hero .blurb { color: var(--dim); margin-top: 22px; max-width: 60ch; font-size: 1.02rem; }
-.book-hero .meta { margin-top: 18px; font-family: 'Press Start 2P', monospace; font-size: .52rem; color: var(--dim); line-height: 2; }
-.book-hero .meta b { color: var(--cyan); }
+.read { padding: 56px clamp(24px,5vw,72px) 120px; min-width: 0; background: var(--page); border-left: 2px solid var(--panel-border); transition: background .2s; }
+.book-hero { margin-bottom: 64px; padding-bottom: 40px; border-bottom: 3px solid var(--rline); }
+.book-hero .kicker { font-family: 'Press Start 2P', monospace; font-size: .6rem; color: var(--rem); }
+.book-hero h1 { font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(2.4rem,6vw,3.6rem); color: var(--rstrong); margin: 18px 0 6px; text-shadow: 3px 3px 0 var(--red); }
+.book-hero .en { font-family: 'Press Start 2P', monospace; font-size: .9rem; color: var(--rink-soft); letter-spacing: 1px; }
+.book-hero .blurb { color: var(--rink-soft); margin-top: 22px; max-width: 60ch; font-size: 1.02rem; }
+.book-hero .meta { margin-top: 18px; font-family: 'Press Start 2P', monospace; font-size: .52rem; color: var(--rink-soft); line-height: 2; }
+.book-hero .meta b { color: var(--rem); }
 
 article.ch { max-width: 720px; margin: 0 auto; padding-top: 48px; }
-article.ch + article.ch { border-top: 1px dashed var(--border); margin-top: 40px; }
-.ch-num { font-family: 'Press Start 2P', monospace; font-size: .6rem; color: var(--gold); }
-.ch-title { font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(1.7rem,4vw,2.3rem); color: var(--ink-hi); margin: 14px 0 36px; }
-article.ch h2:not(.ch-title) { font-family: 'Noto Sans SC', sans-serif; font-weight: 900; font-size: 1.3rem; color: var(--gold); margin: 48px 0 18px; }
-article.ch p { font-family: 'Noto Serif SC', serif; font-size: 1.12rem; line-height: 2; color: var(--ink); margin: 0 0 26px; text-align: justify; }
-article.ch strong { color: var(--gold); font-weight: 700; }
-article.ch em { color: var(--cyan); font-style: normal; }
+article.ch + article.ch { border-top: 1px dashed var(--rline); margin-top: 40px; }
+.ch-num { font-family: 'Press Start 2P', monospace; font-size: .6rem; color: var(--rstrong); }
+.ch-title { font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(1.7rem,4vw,2.3rem); color: var(--rink-hi); margin: 14px 0 36px; }
+article.ch h2:not(.ch-title) { font-family: 'Noto Sans SC', sans-serif; font-weight: 900; font-size: 1.3rem; color: var(--rstrong); margin: 48px 0 18px; }
+article.ch p { font-family: 'Noto Serif SC', serif; font-size: 1.12rem; line-height: 2; color: var(--rink); margin: 0 0 26px; text-align: justify; }
+article.ch strong { color: var(--rstrong); font-weight: 700; }
+article.ch em { color: var(--rem); font-style: normal; }
 article.ch blockquote {
-  border-left: 3px solid var(--cyan); padding: 4px 0 4px 22px; margin: 0 0 30px;
-  color: var(--dim); font-family: 'Noto Serif SC', serif; font-style: italic;
+  border-left: 3px solid var(--rem); padding: 4px 0 4px 22px; margin: 0 0 30px;
+  color: var(--rink-soft); font-family: 'Noto Serif SC', serif; font-style: italic;
 }
-article.ch blockquote p { font-size: 1rem; color: var(--dim); margin: 0; }
-article.ch hr { border: none; border-top: 2px solid var(--border); width: 60px; margin: 44px auto; }
-article.ch ul, article.ch ol { margin: 0 0 26px; padding-left: 1.4em; color: var(--ink); }
+article.ch blockquote p { font-size: 1rem; color: var(--rink-soft); margin: 0; }
+article.ch hr { border: none; border-top: 2px solid var(--rline); width: 60px; margin: 44px auto; }
+article.ch ul, article.ch ol { margin: 0 0 26px; padding-left: 1.4em; color: var(--rink); }
 article.ch li { margin-bottom: 8px; }
-article.ch code { font-family: 'Press Start 2P', monospace; font-size: .7em; color: var(--cyan); background: var(--bg-card); padding: 1px 5px; }
+article.ch code { font-family: 'Press Start 2P', monospace; font-size: .7em; color: var(--rem); background: var(--rline); padding: 1px 5px; }
 :focus-visible { outline: none; box-shadow: var(--ring); }
-::selection { background: rgba(255,71,87,.4); }
+::selection { background: var(--rsel); }
 
-.foot { max-width: 720px; margin: 72px auto 0; padding-top: 32px; border-top: 2px solid var(--border); color: var(--dim); font-size: .88rem; }
-.foot a { color: var(--gold); text-decoration: none; font-weight: 700; }
+.foot { max-width: 720px; margin: 72px auto 0; padding-top: 32px; border-top: 2px solid var(--rline); color: var(--rink-soft); font-size: .88rem; }
+.foot a { color: var(--rstrong); text-decoration: none; font-weight: 700; }
 
 @media (max-width: 860px) {
   .shell { grid-template-columns: 1fr; }
@@ -141,6 +175,11 @@ article.ch code { font-family: 'Press Start 2P', monospace; font-size: .7em; col
   <div class="topbar">
     <a class="home" href="/"><img src="/wanderen-mark.svg" alt="">WANDEREN.AI</a>
     <span class="bookname">📖 <b>玩的人</b> · Homo Ludens</span>
+    <div class="themes" role="group" aria-label="阅读配色">
+      <button type="button" data-theme="night" title="夜 · 深空">夜</button>
+      <button type="button" data-theme="sepia" title="棕 · 羊皮纸">棕</button>
+      <button type="button" data-theme="paper" title="纸 · 亮白">纸</button>
+    </div>
     <div class="readout">当前 <span id="cur">剩下的时间</span> · <b id="curwc">3.4k 字</b><br>全书 <span class="tot">29.6k 字</span> · 9 章</div>
   </div>
   <nav class="chapnav">
@@ -509,6 +548,19 @@ function onScroll() {
 addEventListener('scroll', onScroll, { passive: true });
 addEventListener('resize', onScroll, { passive: true });
 onScroll();
+
+// reading color scheme: persist + highlight active
+const THEME_KEY = 'wd-book-theme';
+const tbtns = [...document.querySelectorAll('.themes button')];
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  tbtns.forEach(b => b.classList.toggle('on', b.dataset.theme === t));
+  try { localStorage.setItem(THEME_KEY, t); } catch (e) {}
+}
+tbtns.forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.theme)));
+let saved = 'night';
+try { saved = localStorage.getItem(THEME_KEY) || 'night'; } catch (e) {}
+applyTheme(saved);
 </script>
 </body>
 </html>
