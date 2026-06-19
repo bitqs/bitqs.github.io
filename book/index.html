@@ -469,22 +469,20 @@ article.ch code { font-family: 'Press Start 2P', monospace; font-size: .7em; col
 </div>
 
 <script>
-// reading progress bar
 const bar = document.querySelector('.progress i');
 const root = document.documentElement;
-addEventListener('scroll', () => {
-  const p = root.scrollTop / (root.scrollHeight - root.clientHeight || 1);
-  bar.style.width = (Math.min(1, Math.max(0, p)) * 100) + '%';
-}, { passive: true });
-
-// scrollspy: sync TOC link, chapter-nav chip, and the 字数 readout
+const arts = [...document.querySelectorAll('article.ch')];
 const tocLinks = [...document.querySelectorAll('.toc a')];
 const chips = [...document.querySelectorAll('.chapnav .chip')];
 const tocMap = new Map(tocLinks.map(a => [a.getAttribute('href').slice(1), a]));
 const chipMap = new Map(chips.map(c => [c.dataset.cid, c]));
 const cur = document.getElementById('cur'), curwc = document.getElementById('curwc');
 const fmtk = n => n >= 1000 ? (n / 1000).toFixed(1) + 'k' : '' + n;
+
+let activeId = null;
 function setActive(id) {
+  if (id === activeId) return;
+  activeId = id;
   tocLinks.forEach(a => a.classList.remove('active'));
   chips.forEach(c => c.classList.remove('active'));
   tocMap.get(id)?.classList.add('active');
@@ -496,10 +494,21 @@ function setActive(id) {
     if (curwc) curwc.textContent = fmtk(+chip.dataset.wc) + ' 字';
   }
 }
-const io = new IntersectionObserver(es => {
-  es.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
-}, { rootMargin: '-25% 0px -70% 0px' });
-document.querySelectorAll('article.ch').forEach(a => io.observe(a));
+
+// deterministic scroll-position driver: progress bar + current chapter
+function onScroll() {
+  const p = root.scrollTop / (root.scrollHeight - root.clientHeight || 1);
+  bar.style.width = (Math.min(1, Math.max(0, p)) * 100) + '%';
+  const thresh = 150;  // px below viewport top (clears the sticky header)
+  let id = arts[0].id;
+  for (const a of arts) {
+    if (a.getBoundingClientRect().top - thresh <= 0) id = a.id; else break;
+  }
+  setActive(id);
+}
+addEventListener('scroll', onScroll, { passive: true });
+addEventListener('resize', onScroll, { passive: true });
+onScroll();
 </script>
 </body>
 </html>
