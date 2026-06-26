@@ -159,6 +159,54 @@ header > * { position: relative; z-index: 1; }
   .book .cta { justify-self: start; }
 }
 
+/* ===== Digest masthead (daily, top of page) ===== */
+.digest {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 22px;
+  margin-top: 36px;
+  background: var(--bg-card);
+  border: 3px solid var(--cyan);
+  box-shadow: 6px 6px 0 #000;
+  padding: 24px 26px;
+  position: relative; overflow: hidden;
+  text-decoration: none; color: var(--ink);
+  transition: transform .08s, box-shadow .08s;
+}
+.digest::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(120% 100% at 0% 50%, rgba(61,232,255,.12), transparent 70%);
+  pointer-events: none;
+}
+.digest > * { position: relative; z-index: 1; }
+.digest:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 #000; animation: hitshake .18s linear; }
+.digest:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--cyan), 0 0 14px var(--glow-cyan), 8px 8px 0 #000;
+}
+.digest .cover { font-size: 3rem; line-height: 1; filter: drop-shadow(0 0 14px var(--glow-cyan)); }
+.digest .label {
+  font-family: 'Press Start 2P', monospace; font-size: .62rem; color: var(--gold);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.digest .live { display: inline-flex; align-items: center; gap: 6px; color: var(--red); }
+.digest .live::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--red);
+  box-shadow: 0 0 8px var(--red); animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .3; transform: scale(.65); } }
+.digest h2 { font-size: 1.5rem; font-weight: 900; line-height: 1.25; }
+.digest h2 .en { color: var(--cyan); font-family: 'Press Start 2P', monospace; font-size: .55em; margin-left: 10px; vertical-align: middle; }
+.digest p { color: var(--dim); font-size: .95rem; margin-top: 8px; max-width: 62ch; }
+.digest p .theme { color: var(--ink); font-weight: 700; }
+.digest .cta {
+  font-family: 'Press Start 2P', monospace; font-size: .7rem; color: var(--cyan);
+  white-space: nowrap; justify-self: end;
+}
+.digest:hover .cta { animation: blink .6s steps(1) infinite; }
+@media (max-width: 640px) {
+  .digest { grid-template-columns: 1fr; gap: 14px; text-align: left; }
+  .digest .cta { justify-self: start; }
+}
+
 /* ===== Section title ===== */
 .sec {
   font-family: 'Press Start 2P', monospace;
@@ -270,6 +318,17 @@ footer a:hover { color: var(--gold); }
     <p class="sub">痴迷『<em>最小的逻辑,如何产生游戏感</em>』——也痴迷用 AI 把这件事做快、做爽。<br>试着在这页上随便点几下。</p>
   </header>
 
+  <a class="digest" href="/digests/">
+    <span class="cover">📰</span>
+    <div>
+      <span class="label">DAILY · 信息日报 <span class="live">LIVE</span></span>
+      <h2>信息日报<span class="en">INFODIGEST</span></h2>
+      <p>每天从 27 个 AI 牛人 + 聚合站精选,Claude 主笔。<br>
+      今日 ▸ <!--DIGEST:START--><span class="theme">下一个范式不是更大的模型,是「会在岗位上学习」的模型</span> · <b>2026-06-27</b><!--DIGEST:END--></p>
+    </div>
+    <span class="cta">▸ 看今日</span>
+  </a>
+
   <a class="book" href="/book/">
     <span class="tag">NEW</span>
     <span class="cover">📖</span>
@@ -301,17 +360,6 @@ footer a:hover { color: var(--gold); }
       <p>"学得快"不是更轻松,而是单位时间里更多次高质量反馈。把认知科学实证翻成训练法:为什么你是自己学习状况的糟糕裁判、可取的难度为何更持久、提取/间隔/交替三件武器怎么用。每句承重话查过出处、标过可信度。</p>
     </div>
     <span class="cta">▸ 开始阅读</span>
-  </a>
-
-  <a class="book" href="/digests/">
-    <span class="tag">NEW</span>
-    <span class="cover">📡</span>
-    <div>
-      <span class="label">DIGEST · 每日更新 · Claude 主笔</span>
-      <h2>信息日报<span class="en">INFODIGEST</span></h2>
-      <p>每天从 Karpathy 等 15 位牛人 + 顶级聚合站抓取,Claude 精选成一份 Top-N + 主题总结。把高信号信息源的每日精华,压成五分钟能读完的一页。</p>
-    </div>
-    <span class="cta">▸ 今日精选</span>
   </a>
 
   <h2 class="sec">GAMES <span class="zh">游戏</span></h2>
