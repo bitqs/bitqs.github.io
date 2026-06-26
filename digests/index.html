@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>信息日报 · 存档</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b14;--bg-card:#12121f;--ink:#e8e6df;--ink-hi:#f4f2ec;--dim:#8a8798;
+  --gold:#ffc83d;--red:#ff4757;--cyan:#3de8ff;--border:#2a2a3e;
+  --glow-gold:rgba(255,200,61,.40);--glow-cyan:rgba(61,232,255,.40);
+  --nebula:radial-gradient(60% 80% at 18% 6%,rgba(255,200,61,.10),transparent 60%),
+           radial-gradient(50% 70% at 92% 26%,rgba(61,232,255,.10),transparent 55%),
+           radial-gradient(70% 60% at 60% 100%,rgba(255,71,87,.08),transparent 60%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Noto Sans SC',sans-serif;
+  line-height:1.85;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.14) 2px 4px)}
+body::after{content:'';position:fixed;inset:0;z-index:9001;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 58%,rgba(0,0,0,.5) 100%)}
+.wrap{max-width:780px;margin:0 auto;padding:0 22px}
+a{color:var(--cyan);text-decoration:none;border-bottom:1px solid transparent;transition:.15s}
+a:hover{border-bottom-color:var(--cyan);text-shadow:0 0 10px var(--glow-cyan)}
+
+/* hero */
+header{padding:64px 0 30px;position:relative}
+header::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:100vw;
+  transform:translateX(-50%);background:var(--nebula);pointer-events:none;z-index:0;
+  -webkit-mask-image:radial-gradient(80% 90% at 30% 30%,#000,transparent 78%);
+  mask-image:radial-gradient(80% 90% at 30% 30%,#000,transparent 78%)}
+header>*{position:relative;z-index:1}
+.logo{font-family:'Press Start 2P',monospace;font-size:clamp(1.1rem,4vw,1.9rem);
+  color:var(--gold);text-shadow:3px 3px 0 var(--red),0 0 22px var(--glow-gold);letter-spacing:1px}
+.logo .ai{color:var(--cyan)}
+.meta{margin-top:16px;color:var(--dim);font-size:.9rem}
+.meta b{color:var(--gold)}
+.back{font-family:'Press Start 2P',monospace;font-size:.6rem;color:var(--gold);display:inline-block;margin-bottom:8px}
+
+/* content typography */
+main{padding:14px 0 80px}
+main h1{display:none}  /* 标题已在 hero */
+main h2{font-size:1.35rem;color:var(--gold);margin:42px 0 16px;padding-bottom:8px;
+  border-bottom:1px solid var(--border);letter-spacing:.5px}
+main h3{font-size:1.05rem;color:var(--cyan);margin:26px 0 10px}
+main p{margin:12px 0}
+main strong{color:var(--ink-hi)}
+main em{color:var(--cyan);font-style:normal}
+
+/* 今日主题 blockquote → 高亮面板 */
+main blockquote{background:var(--bg-card);border:1px solid var(--border);
+  border-left:3px solid var(--gold);border-radius:10px;padding:18px 20px;margin:18px 0;
+  color:var(--ink);font-size:1.02rem;box-shadow:0 0 30px rgba(255,200,61,.06)}
+
+/* Top 必读:有序列表卡片化 */
+main ol{list-style:none;counter-reset:pick;margin:8px 0}
+main ol>li{counter-increment:pick;position:relative;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:12px;padding:18px 20px 18px 58px;margin:14px 0;
+  transition:.2s}
+main ol>li:hover{border-color:var(--gold);box-shadow:0 0 26px rgba(255,200,61,.10);transform:translateY(-2px)}
+main ol>li::before{content:counter(pick);position:absolute;left:16px;top:16px;
+  width:30px;height:30px;display:grid;place-items:center;border-radius:8px;
+  background:linear-gradient(135deg,var(--gold),var(--red));color:#0b0b14;
+  font-family:'Press Start 2P',monospace;font-size:.72rem}
+
+/* 速览:普通无序列表 */
+main ul{list-style:none;margin:10px 0}
+main ul>li{position:relative;padding:6px 0 6px 20px;border-bottom:1px dashed var(--border)}
+main ul>li::before{content:'▸';position:absolute;left:0;color:var(--cyan)}
+main ul>li:last-child{border-bottom:none}
+
+/* inline 来源标签:`code` 样式 */
+main code{background:rgba(61,232,255,.12);color:var(--cyan);padding:1px 7px;
+  border-radius:6px;font-size:.82rem;font-family:'Press Start 2P',monospace;letter-spacing:.3px}
+hr{border:none;border-top:1px solid var(--border);margin:36px 0}
+footer{color:var(--dim);font-size:.82rem;text-align:center;padding:30px 0 50px}
+
+/* index 存档列表 */
+.archive{list-style:none;margin:24px 0}
+.archive li{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
+  padding:18px 22px;margin:14px 0;transition:.2s}
+.archive li:hover{border-color:var(--cyan);box-shadow:0 0 26px rgba(61,232,255,.10);transform:translateY(-2px)}
+.archive .d{font-family:'Press Start 2P',monospace;font-size:.8rem;color:var(--gold)}
+.archive .t{display:block;margin-top:8px;color:var(--ink-hi);font-size:1.05rem;font-weight:700}
+.archive .s{color:var(--dim);font-size:.85rem;margin-top:4px}
+@media(max-width:560px){main ol>li{padding-left:52px}.wrap{padding:0 16px}}
+</style></head><body><div class="wrap"><header>
+      <div class="logo">info<span class="ai">digest</span></div>
+      <div class="meta">个人信息源日报 · 每天从牛人 + 聚合站精选 · Claude 主笔</div>
+    </header><main><ul class="archive"><li><a href="2026-06-26.html">
+          <span class="d">2026-06-26</span>
+          <span class="t">AI 进入「基础设施 + 问责」时代</span>
+          <span class="s">扫描 27 源 · 80 条新内容</span></a></li></ul></main><footer>infodigest</footer></div></body></html>
