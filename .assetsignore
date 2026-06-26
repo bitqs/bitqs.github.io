@@ -1,0 +1,6 @@
+book_src
+.git
+.wrangler
+.claude
+.DS_Store
+deploy.sh
