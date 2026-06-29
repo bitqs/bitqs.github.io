@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>信息日报 · 存档</title>
+<title>信息日报 · 2026-06-29</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
@@ -87,18 +87,67 @@ footer{color:var(--dim);font-size:.82rem;text-align:center;padding:30px 0 50px}
 .archive .s{color:var(--dim);font-size:.85rem;margin-top:4px}
 @media(max-width:560px){main ol>li{padding-left:52px}.wrap{padding:0 16px}}
 </style></head><body><div class="wrap"><header>
+      <a class="back" href="index.html">← 存档</a>
       <div class="logo">info<span class="ai">digest</span></div>
-      <div class="meta">个人信息源日报 · 每天从牛人 + 聚合站精选 · Claude 主笔</div>
-    </header><main><ul class="archive"><li><a href="2026-06-29.html">
-          <span class="d">2026-06-29</span>
-          <span class="t">被锁在门外的人,正在把开源做成底气</span>
-          <span class="s">扫描 27 源 · 17 条新内容</span></a></li><li><a href="2026-06-28.html">
-          <span class="d">2026-06-28</span>
-          <span class="t">门一关上,所有人转身看向「开源 / 本地 / 中国」</span>
-          <span class="s">扫描 27 源 · 20 条新内容</span></a></li><li><a href="2026-06-27.html">
-          <span class="d">2026-06-27</span>
-          <span class="t">同一天,前沿模型被「锁起来」又在「加速跑」</span>
-          <span class="s">扫描 27 源 · 70 条新内容</span></a></li><li><a href="2026-06-26.html">
-          <span class="d">2026-06-26</span>
-          <span class="t">AI 进入「基础设施 + 问责」时代</span>
-          <span class="s">扫描 27 源 · 80 条新内容</span></a></li></ul></main><footer>infodigest</footer></div></body></html>
+      <div class="meta">📅 <b>2026-06-29</b> · 扫描 <b>27</b> 源 · 新内容 <b>17</b> 条 · Claude 主笔</div>
+    </header><main><h1>信息源日报 · 2026-06-29</h1>
+<blockquote>
+<p>HN 与 r/ML 源今天双双抓取失败,内容几乎全来自 r/LocalLLaMA + 两位牛人。所以今天是一期纯粹的「开源/本地」切片——而这恰好是本周主线的延续。</p>
+</blockquote>
+<h2>🎯 今日主题:被锁在门外的人,正在把开源做成底气</h2>
+<p>接着前几天「前沿模型政府准入」的余波,今天社区的情绪从「转向开源」升级成了「为开源正名 + 秀肌肉」。一边是对 Dario「开源没那么开放」论调的正面反驳(开放权重就是开放的那部分);一边是实打实的进展:DeepSeek 把投机解码整套代码库 DeepSpec 开源、DFlash 合进 llama.cpp、Sana 文生图压到 1.58bit、纯 C 手写 Qwen3 推理引擎。Nathan Lambert 同日盘点开源生态(Zyphra/Cohere/Poolside)在扩边界。一句话:<strong>门越关,开源越不只是退路,而是底气。</strong></p>
+<hr>
+<h2>🔥 必读 Top 6</h2>
+<ol>
+<li>
+<p><strong>开源生态盘点 #22:Zyphra、Cohere、Poolside 在拓宽边界</strong> · <code>Interconnects · 牛人/高优先</code><br>
+   Nathan Lambert 评估开放生态现状与各家「为何放出模型」的动机。要判断开源这波是真扩张还是虚火,这是最有信息密度的一篇。<br>
+   → <a href="https://www.interconnects.ai/p/artifacts-22-zyphra-cohere-and-poolside">interconnects.ai</a></p>
+</li>
+<li>
+<p><strong>「开源的头号公敌」</strong> · <code>r/LocalLLaMA 热议</code><br>
+   逐条反驳 Dario 的反开源论:「开源能看源码,模型看不到内部」——可开放权重正是那个「内部」,GLM 5.2、Nemotron-3 Ultra 连数据+训练脚本全开。封闭阵营的话术与开放阵营的现实正面对撞,情绪标本帖。<br>
+   → <a href="https://www.reddit.com/r/LocalLLaMA/comments/1ui241x/">reddit.com</a></p>
+</li>
+<li>
+<p><strong>DeepSpec:DeepSeek 开源投机解码全栈代码库</strong> · <code>r/LocalLLaMA</code><br>
+   数据准备 + draft 模型实现 + 训练 + 评测脚本全开,配套发布 checkpoint。前几天 DSpark 论文之后,DeepSeek 把「更快推理」做成了人人可复现的开源工程。<br>
+   → <a href="https://www.reddit.com/r/LocalLLaMA/comments/1uhyhl3/">reddit.com</a></p>
+</li>
+<li>
+<p><strong>DFlash 已合入 llama.cpp</strong> · <code>r/LocalLLaMA</code><br>
+   配合上条:投机/加速解码进主线推理引擎。开源工具链的复利又厚一层——本地跑大模型的速度天花板继续抬。<br>
+   → <a href="https://www.reddit.com/r/LocalLLaMA/comments/1uhx862/">reddit.com</a></p>
+</li>
+<li>
+<p><strong>「中国在网络安全上追平 Anthropic,重置 AI 竞赛」</strong> · <code>r/LocalLLaMA</code><br>
+   延续本周「准入收紧→开源/中国对冲」主线的又一发酵点。无论标题是否夸张,这股「闭源护城河没那么深」的叙事正在成形。<br>
+   → <a href="https://www.reddit.com/r/LocalLLaMA/comments/1ui3tck/">reddit.com</a></p>
+</li>
+<li>
+<p><strong>Simon Willison:Hack Your Summer</strong> · <code>牛人</code><br>
+   4 周高强度产出冲刺,面向今年遭遇实习寒冬的学生——靠做真东西、公开可展示的成果替代消失的实习。把「没机会」翻成「自己造机会」。<br>
+   → <a href="https://simonwillison.net/2026/Jun/28/hack-your-summer/">simonwillison.net</a></p>
+</li>
+</ol>
+<hr>
+<h2>👤 牛人动态</h2>
+<ul>
+<li><strong>Nathan Lambert(Interconnects)</strong> — 开源生态盘点 #22(见 Top 1):Zyphra/Cohere/Poolside 与各家放模型的动机。</li>
+<li><strong>Simon Willison</strong> — 《Hack Your Summer》(见 Top 6):实习寒冬下的 4 周产出冲刺倡议。</li>
+</ul>
+<h2>🛠️ 本地 LLM / 工程(r/LocalLLaMA,今日主场)</h2>
+<ul>
+<li><strong>极致压缩</strong>:Clark Air 把 Sana 1.6B 文生图压到三值(~1.58bit),体积 8.6× 缩小、质量近 FP16。</li>
+<li><strong>从零造轮子</strong>:纯 C 手写 Qwen3 推理引擎(仅依赖 libc/libm/cJSON);Ornith-1.0-35B 嫁接原生 MTP 自投机,单流解码 1.3× 提速、KLD=0。</li>
+<li><strong>小模型干活</strong>:Qwen3-VL-2B 被评为「土豆机」上唯一靠谱的图→JSON 抽取 VLM;本地模型驱动的 NPC 引擎(Parakeet STT + Gemma 4 + Qwen3-TTS)。</li>
+<li><strong>生态吐槽</strong>:一帖追问「HuggingFace 上为何这么多还不如 base 的垃圾微调模型」——疑为刷 AI 岗位简历的产物。</li>
+<li>工具更新:Koboldcpp v1.116;硬件众生相继续(M5 Max 官翻上架、RTX Pro 6000 涨价 + Inception 折扣申请被拒)。</li>
+</ul>
+<h2>📰 / 📄 速览</h2>
+<ul>
+<li>HN(&gt;100pts)与 arXiv/r/ML 今日抓取失败(hnrss 超时 + reddit 429),故无政策与论文段。明日补。</li>
+</ul>
+<hr>
+<p><em>Generated by infodigest · Claude 主笔 · 部分源临时失联,下一期明天 8:00</em></p></main>
+    <footer>infodigest · 个人信息源日报 · 套 wanderen.ai 设计</footer></div></body></html>
